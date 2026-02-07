@@ -46,7 +46,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
-      const response = await api.post("/api/auth/login", data);
+      const response = await api.post("/auth/login", data);
 
       // حفظ البيانات في Zustand
       setAuth(response.data.user, response.data.token);
