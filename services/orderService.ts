@@ -12,3 +12,13 @@ export const updateOrderStatus = async (
   const { data } = await api.put(`/orders/${orderNumber}`, { status });
   return data;
 };
+
+export const deleteOrder = async (orderNumber: string) => {
+  const { data } = await api.delete(`/orders/${orderNumber}`);
+  return data;
+};
+
+export const deleteAllOrders = async () => {
+  const { data } = await api.delete("/orders/delete-all");
+  return data;
+};

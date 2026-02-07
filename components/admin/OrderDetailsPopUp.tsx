@@ -17,6 +17,7 @@ import {
   Package,
   Clock,
   CheckCircle2,
+  Trash2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -26,11 +27,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function OrderDetailsPopUp({ order }: { order: any }) {
-  const { updateStatus, isUpdating } = useOrders();
+  const { updateStatus, isUpdating, deleteOrder, isDeleting } = useOrders();
   const printRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
 
   const handlePrint = () => {
     const printContent = printRef.current;
@@ -185,8 +187,15 @@ export default function OrderDetailsPopUp({ order }: { order: any }) {
     }
   };
 
+  const handleDelete = () => {
+    if (confirm(`هل أنت متأكد من حذف الطلب #${order.orderNumber}؟`)) {
+      deleteOrder(order.orderNumber);
+      setOpen(false);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
           <Eye className="h-4 w-4 text-slate-600" />
@@ -202,9 +211,20 @@ export default function OrderDetailsPopUp({ order }: { order: any }) {
               <Package className="text-blue-600" /> تفاصيل الطلب #
               {order.orderNumber}
             </span>
-            <Button variant="outline" size="sm" onClick={handlePrint}>
-              <Printer className="ml-2 h-4 w-4" /> طباعة الفاتورة
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={handlePrint}>
+                <Printer className="ml-2 h-4 w-4" /> طباعة الفاتورة
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                <Trash2 className="ml-2 h-4 w-4" />
+                {isDeleting ? "جاري الحذف..." : "حذف الطلب"}
+              </Button>
+            </div>
           </DialogTitle>
         </DialogHeader>
 
@@ -230,6 +250,7 @@ export default function OrderDetailsPopUp({ order }: { order: any }) {
                 {/* مطابقة للباك إند */}
                 <SelectItem value="خرج للتوصيل">خرج للتوصيل</SelectItem>
                 <SelectItem value="وصل">وصل</SelectItem>
+                <SelectItem value="ملغي">ملغي</SelectItem>
               </SelectContent>
             </Select>
           </div>
