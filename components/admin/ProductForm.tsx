@@ -81,6 +81,12 @@ const ProductForm = ({
       formData.append("image", data.image[0]);
     }
 
+    // طباعة البيانات للتحقق
+    console.log("=== FormData Contents ===");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, ":", value);
+    }
+
     if (mode === "add") {
       addProduct(formData, { onSuccess });
     } else {

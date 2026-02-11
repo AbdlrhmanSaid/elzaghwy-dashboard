@@ -21,6 +21,11 @@ export const useProducts = () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("تم الإضافة");
     },
+    onError: (error: any) => {
+      console.error("Error adding product:", error);
+      console.error("Error response:", error.response?.data);
+      toast.error(error.response?.data?.message || "حدث خطأ أثناء الإضافة");
+    },
   });
 
   const updateMutation = useMutation({
@@ -29,6 +34,11 @@ export const useProducts = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("تم التعديل");
+    },
+    onError: (error: any) => {
+      console.error("Error updating product:", error);
+      console.error("Error response:", error.response?.data);
+      toast.error(error.response?.data?.message || "حدث خطأ أثناء التعديل");
     },
   });
 
